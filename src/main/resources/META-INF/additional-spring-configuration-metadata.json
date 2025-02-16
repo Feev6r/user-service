@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "my-app.security.jwt.secret-key",
+    "type": "java.lang.String",
+    "description": "A description for 'my-app.security.jwt.secret-key'"
+  },
+  {
+    "name": "my-app.security.jwt.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'my-app.security.jwt.expiration'"
+  }
+]}
