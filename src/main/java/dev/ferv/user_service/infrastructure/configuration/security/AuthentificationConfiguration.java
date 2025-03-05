@@ -22,8 +22,15 @@ public class AuthentificationConfiguration {
 
     @Bean
     UserDetailsService userDetailService() {
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    return username -> {
+        try {
+            Long userId = Long.parseLong(username);
+            return userRepository.findById(userId)
+                    .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        } catch (NumberFormatException e) {
+            throw new UsernameNotFoundException("Invalid user id format");
+        }
+    };
     }
     
     @Bean

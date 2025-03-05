@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import dev.ferv.user_service.application.dto.request.ClientRequest;
 import dev.ferv.user_service.application.dto.request.EmployeeRequest;
@@ -55,7 +56,7 @@ public class AuthenticationHandler implements IAuthenticationHandler{
         return register(user, Role.ADMIN);
     }
 
-    
+    @Transactional
     private AuthenticationResponse register(User user, Role role) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(role);
@@ -65,27 +66,29 @@ public class AuthenticationHandler implements IAuthenticationHandler{
             LocalDate minDate = LocalDate.now().minusYears(18);
 
             if (!birhtDate.isBefore(minDate) && !birhtDate.isEqual(minDate)) {
-                throw new RuntimeException("The user has to be at leat 18 years old");
+                throw new RuntimeException("The user has to be at least 18 years old");
             }
         }
 
         userServicePort.saveUser(user);
-        String jwtToken = jwtServicePort.generateToken(user);
+        User newUser = userServicePort.getUserByEmail(user.getEmail());
+        
+        String jwtToken = jwtServicePort.generateToken(newUser);
         return AuthenticationResponse.builder()
             .token(jwtToken)
             .build();
     }
-
+     
     @Override
     public AuthenticationResponse authenticate(UserAuthenticationRequest userRequest) {
+        User user = userServicePort.getUserByEmail(userRequest.getEmail());
 
         authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(
-                userRequest.getEmail(),
+                user.getUsername(),
                 userRequest.getPassword())
             );
 
-        User user = userServicePort.getUserByEmail(userRequest.getEmail());
         String jwtToken = jwtServicePort.generateToken(user);
         return AuthenticationResponse.builder()
             .token(jwtToken)

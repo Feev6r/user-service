@@ -28,7 +28,7 @@ public class User {
     }
 
     public String getUsername(){
-        return email;
+        return getId().toString();
     }
 
     public Long getId() {

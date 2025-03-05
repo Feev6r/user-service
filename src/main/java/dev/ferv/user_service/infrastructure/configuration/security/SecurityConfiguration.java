@@ -30,11 +30,15 @@ public class SecurityConfiguration {
             )
             .authorizeHttpRequests(authorize -> authorize
                 // .requestMatchers("/auth/registerAdmin").permitAll() //no esta es necesario estar autenticado porque es para testeo
+                .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                
                 .requestMatchers("/auth/registerClient").permitAll()
                 .requestMatchers("/auth/authenticate").permitAll()
                 .requestMatchers("/user/getAll").hasRole(Role.ADMIN.name())
                 .requestMatchers("/auth/registerOwner").hasRole(Role.ADMIN.name())
                 .requestMatchers("/auth/registerEmployee").hasRole(Role.OWNER.name())
+                .requestMatchers("/user/get/{id}").hasRole(Role.OWNER.name())
+                .requestMatchers("/user/getContact/{id}").hasRole(Role.EMPLOYEE.name())
                 .anyRequest().authenticated()
             )
             .logout(logout -> logout
