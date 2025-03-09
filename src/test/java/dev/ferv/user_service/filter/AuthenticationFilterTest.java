@@ -77,7 +77,7 @@ public class AuthenticationFilterTest {
         // Verificar que el contexto de seguridad se actualizó
         assertNotNull(SecurityContextHolder.getContext().getAuthentication());
  
-        //Verificar el metodo getUserIdBySecurityContext para obtener el id del contexto
+        //Verificar el metodo getUserIdBySecurityContext para obtener el igd del contexto
         String email = jwtAdapter.getUserEmailBySecurityContext();
         assertEquals("fernandovillegass000@gmail.com", email);
 

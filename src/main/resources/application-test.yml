@@ -1,0 +1,32 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: user-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/<db>
+    username: postgres
+    password: <password>
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+my-app:
+  security:
+    jwt:
+      secret-key: aa51197e3861ba9d8e7d3add5f2bc30862c891e0a3762935c8b8ecf6a61a9994
+      expiration: 86400000 # a day
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

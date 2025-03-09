@@ -34,3 +34,4 @@ build/
 .env
 .md
 /target
+application.yml
